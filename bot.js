@@ -18,7 +18,7 @@ client.on('ready', function(){
  game: { 
     type: 1,
      url: 'https://www.twitch.tv/skwadraa',
-    name: 'I AM CUTE',
+    name: 'NO ONE LOVE YOU',
     application_id: '477187715658547201',
      assets: {
          large_image:   `${s[Math.floor(Math.random() * s.length)]}`,
@@ -28,14 +28,12 @@ client.on('ready', function(){
     });
     }, 5000);
 });
-const devs = ["538349275713634315","519546052941185024"];
+const devs = ["538349275713634315"];
 const prefix = "+"
 client.on('message', async msg => {
     if (msg.author.bot) return undefined;
-  if (!devs.includes(msg.author.id)) return;
     if (!msg.content.startsWith(prefix)) return undefined;
     const args = msg.content.split(' ');
-
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1] .replace(/<(.+)>/g, '$1') : '';
     const serverQueue = queue.get(msg.guild.id);
@@ -52,7 +50,10 @@ client.on('message', async msg => {
             return msg.channel.send('لا يتوآجد لدي صلاحية للتكلم بهذآ الروم').then(message =>{message.delete(2000)})
         }
  
-       
+        if (!permissions.has('EMBED_LINKS')) {
+            return msg.channel.sendMessage("**يجب توآفر برمشن `EMBED LINKS`لدي **rl").then(message =>{message.delete(2000)})
+            }
+ 
         if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
             const playlist = await youtube.getPlaylist(url);
             const videos = await playlist.getVideos();
@@ -72,11 +73,11 @@ client.on('message', async msg => {
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                    
+                 
                     msg.channel.send(`**
 ${videos.map(video2 => `[\`${++index}\`]${video2.title}`).join('\n')}**`).then(message =>{
  
                         message.delete(15000)
- 
  
                     });
                     try {
@@ -153,8 +154,12 @@ ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
         }
         return msg.channel.send('لا يوجد شيء حالي في العمل.').then(message =>{message.delete(2000)})
     }
- 
-    return undefined;
+ 	else if (command === `join`) {
+		   if (msg.author.id !== "439187325503930369") return;
+		if (!msg.member.voiceChannel) return msg.channel.send('nop');
+		msg.member.voiceChannel.join().then(msg.channel.send(':ok:'));
+		return undefined;
+		 }
 async function handleVideo(video, msg, voiceChannel, playlist = false) {
     const serverQueue = queue.get(msg.guild.id);
     const song = {
@@ -205,7 +210,6 @@ function play(guild, song) {
     const serverQueue = queue.get(guild.id);
  
     if (!song) {
-      serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
         return;
     }
@@ -221,7 +225,7 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
         fetchVideoInfo(`${song.hi}`, function (err, fuck) {
   if (err) throw new Error(err);
-
+ 
       const yyyy = {}
   if(!yyyy[msg.guild.id]) yyyy[msg.guild.id] = {
     like: `${fuck.likeCount}`,
@@ -246,13 +250,13 @@ function play(guild, song) {
         love.delete(2000)
    
  //.then(message =>{message.delete(2000)})
-  
+ 
 })
 })
 }
 });
 client.on('message' , message => {
-  var prefix = "*";
+  var prefix = "R";
   if(message.author.bot) return;
  
   if(message.content.startsWith(prefix + "xo")) {
