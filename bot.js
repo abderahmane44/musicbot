@@ -12,7 +12,7 @@ console.log("log");
 
 
 client.on('message', message => {
-  var prefix = "!";
+  var prefix = "+";
   if (message.author.omar) return;
   if (!message.content.startsWith(prefix)) return;
   var command = message.content.split(" ")[0];
